@@ -30,11 +30,11 @@ kotlin {
                     .matching { it.publication == targetPublication }
                     .configureEach { onlyIf { findProperty("isMainHost") == "true" } }
             }
-            withType<MavenPublication>{
+            create<MavenPublication>("mavenJava") {
                 artifact(tasks.sourcesJar.get())
                 groupId = "github.com.LeviDanCoder"
                 artifactId = "multiplatformtestFromAndroid"
-                version = "1.2"
+                version = "1.1"
             }
         }
     }

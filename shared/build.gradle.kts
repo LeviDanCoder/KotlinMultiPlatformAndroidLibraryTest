@@ -20,6 +20,10 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
+    android {
+        publishLibraryVariants("release", "debug")
+    }
+
     val publicationsFromMainHost =
         listOf(jvm(), js()).map { it.name } + "kotlinMultiplatform"
     publishing {
@@ -38,6 +42,7 @@ kotlin {
             }
         }
     }
+
 
     cocoapods {
         summary = "Some description for the Shared Module"
@@ -86,17 +91,3 @@ android {
         targetSdk = 32
     }
 }
-
-//afterEvaluate {
-//    publishing {
-//        publications {
-//            create<MavenPublication>("mavenJava") {
-//                artifact(tasks.sourcesJar.get())
-//                groupId = "github.com.LeviDanCoder"
-//                artifactId = "multiplatformtestFromAndroid"
-//                version="1.0"
-//            }
-//        }
-//    }
-//}
-

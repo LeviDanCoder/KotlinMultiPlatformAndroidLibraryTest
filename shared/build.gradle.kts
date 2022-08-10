@@ -20,6 +20,25 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
+    val publicationsFromMainHost =
+        listOf(jvm(), js()).map { it.name } + "kotlinMultiplatform"
+    publishing {
+        publications {
+            matching { it.name in publicationsFromMainHost }.all {
+                val targetPublication = this@all
+                tasks.withType<AbstractPublishToMaven>()
+                    .matching { it.publication == targetPublication }
+                    .configureEach { onlyIf { findProperty("isMainHost") == "true" } }
+            }
+            create<MavenPublication>("mavenJava") {
+                artifact(tasks.sourcesJar.get())
+                groupId = "github.com.LeviDanCoder"
+                artifactId = "multiplatformtestFromAndroid"
+                version = "1.1"
+            }
+        }
+    }
+
     cocoapods {
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
@@ -28,7 +47,7 @@ kotlin {
             baseName = "shared"
         }
     }
-    
+
     sourceSets {
         val commonMain by getting
         val commonTest by getting {
@@ -68,16 +87,16 @@ android {
     }
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("mavenJava") {
-                //from(components["java"]) // <-- this is not required
-                artifact(tasks.sourcesJar.get())
-                groupId = "github.com.LeviDanCoder"
-                artifactId = "multiplatformtestFromAndroid"
-                version="1.0"
-            }
-        }
-    }
-}
+//afterEvaluate {
+//    publishing {
+//        publications {
+//            create<MavenPublication>("mavenJava") {
+//                artifact(tasks.sourcesJar.get())
+//                groupId = "github.com.LeviDanCoder"
+//                artifactId = "multiplatformtestFromAndroid"
+//                version="1.0"
+//            }
+//        }
+//    }
+//}
+
